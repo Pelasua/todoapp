@@ -1,5 +1,8 @@
 <template>
   <div id="wrapper">
+    <nav id="navbar">
+
+    </nav>
   </div>
 </template>
 
@@ -13,9 +16,15 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
   #wrapper {
+    display: flex;
     position: relative;
     height: 100%;
     width: 100%;
     background-color: $c_gray;
+  }
+
+  #navbar {
+    flex-basis: 70px;
+    background-color: $c_green;
   }
 </style>
