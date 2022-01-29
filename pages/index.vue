@@ -1,8 +1,12 @@
 <template>
   <div id="wrapper">
-    <nav id="navbar">
+    <nav id="navbar"></nav>
 
-    </nav>
+    <div id="content">
+      <button class="custom_btn">
+        Nueva tarea
+      </button>
+    </div>
   </div>
 </template>
 
@@ -15,16 +19,21 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-  #wrapper {
-    display: flex;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background-color: $c_gray;
-  }
+#wrapper {
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: $c_gray;
+}
 
-  #navbar {
-    flex-basis: 70px;
-    background-color: $c_green;
-  }
+#navbar {
+  flex-basis: 70px;
+  background-color: $c_green;
+}
+
+#content {
+  flex-basis: 100%;
+  padding: 50px 30px;
+}
 </style>
