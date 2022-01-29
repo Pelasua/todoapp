@@ -14,14 +14,21 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap'
+      }
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'normalize.css',
     '~assets/scss/main.scss',
-    '~assets/scss/colors.scss'
+    '~assets/scss/colors.scss',
+    '~assets/scss/elements.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -49,4 +56,6 @@ export default {
   styleResources: {
     scss: ['./assets/scss/*.scss']
   },
+
+
 }
