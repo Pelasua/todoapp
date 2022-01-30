@@ -1,29 +1,58 @@
 <template>
-  <div class="task" :class="{hidden: !taskOpened}">
+  <div class="task" @click="exitTaskView($event)">
     <div class="task__background"></div>
     <div class="task__view">
       <div class="task__title">
-        <input v-model="title" type="text" maxlength="22" placeholder="Título">
+        <input
+          v-model="title"
+          type="text"
+          maxlength="22"
+          placeholder="Título"
+        />
       </div>
       <div class="task__description">
-        <textarea v-model="description" type="text" maxlength="256" placeholder="Escribe una breve descripción"></textarea>
+        <textarea
+          v-model="description"
+          type="text"
+          maxlength="256"
+          placeholder="Escribe una breve descripción"
+        ></textarea>
       </div>
-      <div class="task__interactions">
-        <button class="custom_btn">Crear</button>
+      <div v-if="newTask" class="task__interactions">
+        <button class="custom_btn" @click="createTask">Crear</button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 @Component
 export default class Task extends Vue {
-  title: String = ""
-  description: String = ""
-  newTask: Boolean = true
-  taskOpened: Boolean = false
+  title: String = ''
+  description: String = ''
 
+  @Prop({ default: true })
+  newTask!: boolean
+
+  createTask() {
+    const task = {
+      id: new Date().valueOf(),
+      title: this.title,
+      description: this.description,
+    }
+    const tasks = JSON.parse(window.localStorage.getItem('tasks') || '')
+
+    tasks.todo.push(task)
+    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    this.$emit('toggleTaskView')
+  }
+
+  exitTaskView(e:any ) {
+    if (e.target.className === 'task__background') {
+      this.$emit('toggleTaskView')
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -72,13 +101,17 @@ export default class Task extends Vue {
     justify-content: right;
   }
 
-  input, textarea {
+  input,
+  textarea {
     height: 100%;
     width: 100%;
     color: $c_dark_gray;
-    &, &:active, &:hover, &:focus-visible {
+    &,
+    &:active,
+    &:hover,
+    &:focus-visible {
       border: 0;
-      box-shadow : none;
+      box-shadow: none;
       outline: 0;
     }
   }
