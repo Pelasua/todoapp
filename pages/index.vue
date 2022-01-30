@@ -3,18 +3,22 @@
     <nav id="navbar"></nav>
 
     <div id="content">
-      <button class="custom_btn">
-        Nueva tarea
-      </button>
+      <button class="custom_btn">Nueva tarea</button>
+      <task-container :title="'To do'" />
+      <task-container :title="'Doing'" />
+      <task-container :title="'Done'" />
+      <task-container :title="'Backlog'" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import taskContainer from '~/components/task-container.vue'
 
 export default Vue.extend({
   name: 'TaskPage',
+  components: { taskContainer }
 })
 </script>
 
@@ -33,7 +37,15 @@ export default Vue.extend({
 }
 
 #content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  justify-content: flex-start;
   flex-basis: 100%;
   padding: 50px 30px;
+}
+
+.custom_btn {
+  width: 150px;
 }
 </style>

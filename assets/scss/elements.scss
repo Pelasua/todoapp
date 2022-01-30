@@ -1,13 +1,28 @@
-button.custom_btn{
-  background-color: $c_green;
-  font-size: 17px;
-  border-radius: 8px;
-  border: 0;
-  color: #fff;
-  padding: 8px 12px;
-
+button {
   &:hover {
-    background-color: #1b3d17;
     cursor: pointer;
+  }
+
+  &.custom_btn {
+    background-color: $c_green;
+    font-size: 17px;
+    border-radius: 8px;
+    border: 0;
+    color: #fff;
+    padding: 8px 12px;
+    &:hover {
+      background-color: #1b3d17;
+    }
+  }
+
+  &.icon {
+    background: none;
+    border: 0;
+    color: inherit;
+
+    &--collapsed {
+      transform: rotate(270deg);
+    }
+
   }
 }

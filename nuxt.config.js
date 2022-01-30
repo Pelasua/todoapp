@@ -43,6 +43,7 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    '@nuxtjs/fontawesome',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,5 +58,10 @@ export default {
     scss: ['./assets/scss/*.scss']
   },
 
+  fontawesome: {
+    icons: {
+      solid: true,
+    }
+  },
 
 }
