@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <nav id="navbar"></nav>
-
+    <task />
     <div id="content">
       <button class="custom_btn">Nueva tarea</button>
       <task-container :title="'To do'" />
