@@ -12,7 +12,7 @@
         <font-awesome-icon :icon="['fas', 'chevron-down']" />
       </button>
     </div>
-    <div class="task-container__content">
+    <div class="task-container__content" :class="{ 'task-container__content--collapsed': arrowIsCollapsed }">
       <div v-for="task in tasks" :key="task.id">
         <TaskBoard
           v-if="task.type === taskType"
@@ -84,6 +84,11 @@ export default Vue.extend({
     flex-wrap: wrap;
     padding: 6px 0;
     gap: 10px;
+
+    &--collapsed {
+      display: none;
+    }
   }
+
 }
 </style>
