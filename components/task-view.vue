@@ -10,11 +10,23 @@
           placeholder="Título"
         />
       </div>
+      <div v-if="!newTask" class="task__type-selector">
+        <select v-model="type" @change="prueba">
+          <option
+            v-for="taskType in taskTypes"
+            :key="taskType.title"
+            :value="taskType.value"
+            :selected="taskType.value == type"
+          >
+            {{ taskType.title }}
+          </option>
+        </select>
+      </div>
       <div class="task__description">
         <textarea
           v-model="description"
           type="text"
-          maxlength="256"
+          maxlength="500"
           placeholder="Escribe una breve descripción"
         ></textarea>
       </div>
@@ -25,11 +37,7 @@
         <button v-if="!newTask" class="custom_btn" @click="modifyTask">
           Modificar
         </button>
-        <button
-          v-if="!newTask"
-          class="custom_btn"
-          @click="deleteTask"
-        >
+        <button v-if="!newTask" class="custom_btn" @click="deleteTask">
           <font-awesome-icon :icon="['fas', 'trash']" />
         </button>
       </div>
@@ -48,7 +56,16 @@ export default Vue.extend({
     const description: String = ''
     const newTask: Boolean = true
     const type: String = ''
-    return { id, title, description, newTask, type }
+    const taskTypes: any[] = [
+      {
+        title: 'To do',
+        value: 'todo',
+      },
+      { title: 'Doing', value: 'doing' },
+      { title: 'Done', value: 'done' },
+      { title: 'Backlog', value: 'backlog' },
+    ]
+    return { id, title, description, newTask, type, taskTypes }
   },
   created() {
     if (this.$store.state.showTask.id) {
@@ -58,11 +75,15 @@ export default Vue.extend({
           this.title = task.title
           this.description = task.description
           this.newTask = false
+          this.type = task.type
         }
       })
     }
   },
   methods: {
+    prueba() {
+      console.log(this.type);
+    },
     createTask() {
       const task = {
         id: new Date().valueOf(),
@@ -85,6 +106,7 @@ export default Vue.extend({
         if (task.id === this.id) {
           task.title = this.title
           task.description = this.description
+          task.type = this.type
         }
       })
 
@@ -103,7 +125,7 @@ export default Vue.extend({
       })
 
       window.localStorage.setItem('tasks', JSON.stringify(tasks))
-       this.$store.commit('hideTask')
+      this.$store.commit('hideTask')
       this.$store.commit('refreshTasks')
     },
 
@@ -122,7 +144,7 @@ export default Vue.extend({
   width: 100%;
 
   &__background {
-    position: relative;
+    position: absolute;
     height: 100%;
     width: 100%;
     background-color: #000;
@@ -133,6 +155,7 @@ export default Vue.extend({
     position: absolute;
     display: flex;
     flex-direction: column;
+    gap: 6px;
     height: 400px;
     width: 400px;
     background-color: #fff;
@@ -141,6 +164,11 @@ export default Vue.extend({
     transform: translate(-50%, -50%);
     border-radius: 12px;
     padding: 6px;
+
+    @media (max-width:480px) {
+      position: fixed;
+      width: 250px;
+    }
   }
 
   &__title {
@@ -149,6 +177,14 @@ export default Vue.extend({
     border-bottom: 1px solid $c_gray;
     font-size: 30px;
     overflow: hidden;
+  }
+
+  &__type-selector {
+    & > select {
+      border: 2px solid $c_green;
+      font-size: 16px;
+      color: $c_dark_gray;
+    }
   }
 
   &__description {

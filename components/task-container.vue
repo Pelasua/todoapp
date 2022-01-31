@@ -13,7 +13,7 @@
       </button>
     </div>
     <div class="task-container__content" :class="{ 'task-container__content--collapsed': arrowIsCollapsed }">
-      <div v-for="task in tasks" :key="task.id">
+      <div v-for="task in tasks" :key="task.id" >
         <TaskBoard
           v-if="task.type === taskType"
           :id="task.id"
@@ -40,7 +40,7 @@ export default Vue.extend({
   },
 
   computed: {
-    tasks() {
+    tasks(): any {
       return this.$store.state.tasks
     },
   },
@@ -83,7 +83,7 @@ export default Vue.extend({
     display: flex;
     flex-wrap: wrap;
     padding: 6px 0;
-    gap: 10px;
+    margin: 0 -6px;
 
     &--collapsed {
       display: none;

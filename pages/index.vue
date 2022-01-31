@@ -15,6 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  name: 'MainPage',
   head() {
     return {
       title: 'To do app',
@@ -47,9 +48,8 @@ export default Vue.extend({
 #wrapper {
   display: flex;
   position: relative;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
-  background-color: $c_gray;
 }
 
 #navbar {

@@ -17,17 +17,11 @@ export default Vue.extend({
   },
   computed: {
     shortDescription(): String {
-      return ( this.description.length <=20) ? this.description : `${this.description.substring(0, 19)}...`
+      return ( this.description.length <=40) ? this.description : `${this.description.substring(0, 39)}...`
     },
   },
   methods: {
     openTask() {
-      const data: any = {
-        id: this.id,
-        title: this.title,
-        description: this.description,
-        type: this.taskType
-      }
      this.$store.commit('showTask', this.id)
     },
   },
@@ -38,6 +32,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding: 6px;
+  margin: 6px;
   width: 200px;
   height: 120px;
   border-radius: 12px;
