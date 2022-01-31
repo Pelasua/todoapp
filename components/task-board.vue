@@ -1,22 +1,46 @@
 <template>
-  <div class="task-board" :class="taskType"></div>
+  <div class="task-board" :class="taskType">
+    <span class="task-board__title">{{ title }}</span>
+    <p class="task-board__description">{{ shortDescription }}</p>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
-@Component
-export default class TaskBoard extends Vue {
-  @Prop({ required: true, type: Number }) readonly id!: number
-  @Prop({ required: true, type: String }) readonly title!: string
-  @Prop({ required: true, type: String }) readonly description!: string
-  @Prop({ required: true, type: String }) readonly taskType!: string
-}
+import Vue from 'vue'
+export default Vue.extend({
+  name: 'TaskBoard',
+  props: {
+    id: { type: Number, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true, default: '' },
+    taskType: { type: String, required: true },
+  },
+  computed: {
+    shortDescription(): String {
+      return ( this.description.length <=50) ? this.description : `${this.description.substring(0, 49)}...`
+    },
+  },
+})
 </script>
 <style lang="scss" scoped>
 .task-board {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
   width: 200px;
-  height: 140px;
+  height: 120px;
   border-radius: 12px;
+  color: $c_dark_gray;
+  overflow: hidden;
+
+  &__title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &__description {
+    height: 100%;
+  }
 }
 
 .todo {

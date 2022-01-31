@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <nav id="navbar"></nav>
-    <task v-if="taskOpened" @toggleTaskView="toggleTaskView" />
+    <TaskView v-if="taskOpened" @toggleTaskView="toggleTaskView" />
     <div id="content">
       <button class="custom_btn" @click="toggleTaskView">Nueva tarea</button>
       <task-container :title="'To do'" :task-type="'todo'" />
@@ -13,21 +13,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
-import taskContainer from '~/components/task-container.vue'
-@Component({
-  components: { taskContainer },
-})
-export default class TaskPage extends Vue {
-  taskOpened: boolean = false
 
-  created() {
-    this.generateLocalStorage()
-  }
-
-  toggleTaskView() {
+import Vue from 'vue'
+export default Vue.extend({
+data() {
+    const taskOpened: boolean = false
+    return { taskOpened }
+  },
+  head() {
+    return {
+      title: 'To do app'
+    }
+  },
+  created(){
+   this.generateLocalStorage()
+  },
+  methods: {
+    toggleTaskView() {
     this.taskOpened = !this.taskOpened
-  }
+  },
 
   generateLocalStorage() {
     const tasks: any = {data: []}
@@ -35,7 +39,8 @@ export default class TaskPage extends Vue {
       window.localStorage.setItem('tasks', JSON.stringify(tasks))
     }
   }
-}
+  },
+})
 </script>
 
 <style lang="scss" scoped>

@@ -28,19 +28,15 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  name: 'TaskContainer',
   props: {
     title: { type: String, default: '' },
     taskType: { type: String, default: '' },
   },
+
   data() {
     const arrowIsCollapsed: Boolean = false
     return { arrowIsCollapsed }
-  },
-
-  head() {
-    return {
-      title: 'To do app',
-    }
   },
 
   computed: {

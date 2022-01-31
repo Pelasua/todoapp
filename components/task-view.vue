@@ -26,36 +26,39 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
-@Component
-export default class Task extends Vue {
-  title: String = ''
-  description: String = ''
+import Vue from 'vue'
+export default Vue.extend({
+  name: 'TaskView',
+  props: {
+    newTask: { type: Boolean, default: true },
+  },
+  data() {
+    const title: String = ''
+    const description: String = ''
+    return { title, description }
+  },
+  methods: {
+    createTask() {
+      const task = {
+        id: new Date().valueOf(),
+        title: this.title,
+        description: this.description,
+        type: 'todo',
+      }
+      const tasks = JSON.parse(window.localStorage.getItem('tasks') || '{}')
 
-  @Prop({ default: true })
-  newTask!: boolean
-
-  createTask() {
-    const task = {
-      id: new Date().valueOf(),
-      title: this.title,
-      description: this.description,
-      type: 'todo',
-    }
-    const tasks = JSON.parse(window.localStorage.getItem('tasks') || '{}')
-
-    tasks.data.push(task)
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
-    this.$store.commit('refreshTasks')
-    this.$emit('toggleTaskView')
-  }
-
-  exitTaskView(e: any) {
-    if (e.target.className === 'task__background') {
+      tasks.data.push(task)
+      window.localStorage.setItem('tasks', JSON.stringify(tasks))
+      this.$store.commit('refreshTasks')
       this.$emit('toggleTaskView')
-    }
-  }
-}
+    },
+    exitTaskView(e: any) {
+      if (e.target.className === 'task__background') {
+        this.$emit('toggleTaskView')
+      }
+    },
+  },
+})
 </script>
 <style lang="scss" scoped>
 .task {
