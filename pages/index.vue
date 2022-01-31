@@ -4,10 +4,10 @@
     <task v-if="taskOpened" @toggleTaskView="toggleTaskView" />
     <div id="content">
       <button class="custom_btn" @click="toggleTaskView">Nueva tarea</button>
-      <task-container :title="'To do'" />
-      <task-container :title="'Doing'" />
-      <task-container :title="'Done'" />
-      <task-container :title="'Backlog'" />
+      <task-container :title="'To do'" :task-type="'todo'" />
+      <task-container :title="'Doing'" :task-type="'doing'"/>
+      <task-container :title="'Done'" :task-type="'done'" />
+      <task-container :title="'Backlog'" :task-type="'backlog'" />
     </div>
   </div>
 </template>
@@ -19,7 +19,7 @@ import taskContainer from '~/components/task-container.vue'
   components: { taskContainer },
 })
 export default class TaskPage extends Vue {
-  taskOpened: Boolean = false
+  taskOpened: boolean = false
 
   created() {
     this.generateLocalStorage()
@@ -30,12 +30,7 @@ export default class TaskPage extends Vue {
   }
 
   generateLocalStorage() {
-    const tasks: any = {
-      todo: [],
-      doing: [],
-      done: [],
-      backlog: [],
-    }
+    const tasks: any = {data: []}
     if (!window.localStorage.getItem('tasks')) {
       window.localStorage.setItem('tasks', JSON.stringify(tasks))
     }

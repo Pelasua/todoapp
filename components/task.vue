@@ -40,15 +40,17 @@ export default class Task extends Vue {
       id: new Date().valueOf(),
       title: this.title,
       description: this.description,
+      type: 'todo',
     }
-    const tasks = JSON.parse(window.localStorage.getItem('tasks') || '')
+    const tasks = JSON.parse(window.localStorage.getItem('tasks') || '{}')
 
-    tasks.todo.push(task)
+    tasks.data.push(task)
     window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    this.$store.commit('refreshTasks')
     this.$emit('toggleTaskView')
   }
 
-  exitTaskView(e:any ) {
+  exitTaskView(e: any) {
     if (e.target.className === 'task__background') {
       this.$emit('toggleTaskView')
     }

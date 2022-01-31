@@ -1,68 +1,93 @@
 <template>
   <div class="task-container">
-    <div class="title">
-      <span class="title__text" :class="titleClassByType">
+    <div class="task-container__title">
+      <span class="text" :class="taskType">
         {{ title }}
       </span>
-      <button class="icon" :class="{'icon--collapsed': arrowIsCollapsed}" @click="arrowIsCollapsed = !arrowIsCollapsed"
-        ><font-awesome-icon :icon="['fas', 'chevron-down']"
-      /></button>
+      <button
+        class="icon"
+        :class="{ 'icon--collapsed': arrowIsCollapsed }"
+        @click="arrowIsCollapsed = !arrowIsCollapsed"
+      >
+        <font-awesome-icon :icon="['fas', 'chevron-down']" />
+      </button>
+    </div>
+    <div class="task-container__content">
+      <div v-for="task in tasks" :key="task.id">
+        <TaskBoard
+          v-if="task.type === taskType"
+          :id="task.id"
+          :title="task.title"
+          :description="task.description"
+          :task-type="taskType"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
-@Component
-export default class TaskContainer extends Vue {
+import Vue from 'vue'
+export default Vue.extend({
+  props: {
+    title: { type: String, default: '' },
+    taskType: { type: String, default: '' },
+  },
+  data() {
+    const arrowIsCollapsed: Boolean = false
+    return { arrowIsCollapsed }
+  },
 
-  arrowIsCollapsed: Boolean = false
-
-  @Prop({ required: true, type: String }) readonly title!: string
-
-  get titleClassByType() {
-    const titleType: string = this.title
-    const titleClasses: any = {
-      'To do': 'title__text--todo',
-      'Doing': 'title__text--doing',
-      'Done': 'title__text--done',
-      'Backlog': 'title__text--backlog',
+  head() {
+    return {
+      title: 'To do app',
     }
+  },
 
-    return titleClasses[titleType]
-  }
-
-
-}
+  computed: {
+    tasks() {
+      return this.$store.state.tasks
+    },
+  },
+})
 </script>
 <style lang="scss" scoped>
-.title {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  color: $c_dark_gray;
-  border-bottom: 2px solid $c_dark_gray;
+.task-container {
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: $c_dark_gray;
+    border-bottom: 2px solid $c_dark_gray;
 
-  &__text {
-    color: #fff;
-    border-radius: 4px;
-    display: inline-flex;
-    padding: 4px;
+    & > .text {
+      color: #fff;
+      border-radius: 4px;
+      display: inline-flex;
+      padding: 4px;
+    }
 
-    &--todo {
+    .todo {
       background-color: $c_todo;
     }
 
-    &--doing {
-       background-color: $c_doing;
+    .doing {
+      background-color: $c_doing;
     }
 
-    &--done {
-       background-color: $c_done;
+    .done {
+      background-color: $c_done;
     }
 
-    &--backlog {
-       background-color: $c_backlog;
+    .backlog {
+      background-color: $c_backlog;
     }
+  }
+
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 6px 0;
+    gap: 10px;
   }
 }
 </style>
