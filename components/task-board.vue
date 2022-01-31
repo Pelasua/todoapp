@@ -1,5 +1,5 @@
 <template>
-  <div class="task-board" :class="taskType">
+  <div class="task-board" :class="taskType" @click="openTask">
     <span class="task-board__title">{{ title }}</span>
     <p class="task-board__description">{{ shortDescription }}</p>
   </div>
@@ -17,7 +17,18 @@ export default Vue.extend({
   },
   computed: {
     shortDescription(): String {
-      return ( this.description.length <=50) ? this.description : `${this.description.substring(0, 49)}...`
+      return ( this.description.length <=20) ? this.description : `${this.description.substring(0, 19)}...`
+    },
+  },
+  methods: {
+    openTask() {
+      const data: any = {
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        type: this.taskType
+      }
+     this.$store.commit('showTask', this.id)
     },
   },
 })
@@ -32,6 +43,7 @@ export default Vue.extend({
   border-radius: 12px;
   color: $c_dark_gray;
   overflow: hidden;
+  cursor: pointer;
 
   &__title {
     font-size: 18px;

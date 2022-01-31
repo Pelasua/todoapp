@@ -18,8 +18,20 @@
           placeholder="Escribe una breve descripción"
         ></textarea>
       </div>
-      <div v-if="newTask" class="task__interactions">
-        <button class="custom_btn" @click="createTask">Crear</button>
+      <div class="task__interactions">
+        <button v-if="newTask" class="custom_btn" @click="createTask">
+          Crear
+        </button>
+        <button v-if="!newTask" class="custom_btn" @click="modifyTask">
+          Modificar
+        </button>
+        <button
+          v-if="!newTask"
+          class="custom_btn"
+          @click="deleteTask"
+        >
+          <font-awesome-icon :icon="['fas', 'trash']" />
+        </button>
       </div>
     </div>
   </div>
@@ -29,19 +41,32 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'TaskView',
-  props: {
-    newTask: { type: Boolean, default: true },
-  },
+
   data() {
+    const id: any = null
     const title: String = ''
     const description: String = ''
-    return { title, description }
+    const newTask: Boolean = true
+    const type: String = ''
+    return { id, title, description, newTask, type }
+  },
+  created() {
+    if (this.$store.state.showTask.id) {
+      this.$store.state.tasks.forEach((task: any) => {
+        if (task.id === this.$store.state.showTask.id) {
+          this.id = task.id
+          this.title = task.title
+          this.description = task.description
+          this.newTask = false
+        }
+      })
+    }
   },
   methods: {
     createTask() {
       const task = {
         id: new Date().valueOf(),
-        title: this.title,
+        title: this.title === '' ? 'Tarea' : this.title,
         description: this.description,
         type: 'todo',
       }
@@ -49,12 +74,42 @@ export default Vue.extend({
 
       tasks.data.push(task)
       window.localStorage.setItem('tasks', JSON.stringify(tasks))
+      this.$store.commit('hideTask')
       this.$store.commit('refreshTasks')
-      this.$emit('toggleTaskView')
     },
+
+    modifyTask() {
+      const tasks = JSON.parse(window.localStorage.getItem('tasks') || '{}')
+
+      tasks.data.forEach((task: any) => {
+        if (task.id === this.id) {
+          task.title = this.title
+          task.description = this.description
+        }
+      })
+
+      window.localStorage.setItem('tasks', JSON.stringify(tasks))
+      this.$store.commit('hideTask')
+      this.$store.commit('refreshTasks')
+    },
+
+    deleteTask() {
+      const tasks = JSON.parse(window.localStorage.getItem('tasks') || '{}')
+
+      tasks.data.forEach((task: any, index: number) => {
+        if (task.id === this.id) {
+          tasks.data.splice(index, 1)
+        }
+      })
+
+      window.localStorage.setItem('tasks', JSON.stringify(tasks))
+       this.$store.commit('hideTask')
+      this.$store.commit('refreshTasks')
+    },
+
     exitTaskView(e: any) {
       if (e.target.className === 'task__background') {
-        this.$emit('toggleTaskView')
+        this.$store.commit('hideTask')
       }
     },
   },
@@ -104,6 +159,7 @@ export default Vue.extend({
   &__interactions {
     display: flex;
     justify-content: right;
+    gap: 6px;
   }
 
   input,

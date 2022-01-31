@@ -1,11 +1,11 @@
 <template>
   <div id="wrapper">
     <nav id="navbar"></nav>
-    <TaskView v-if="taskOpened" @toggleTaskView="toggleTaskView" />
+    <TaskView v-if="taskOpened" />
     <div id="content">
-      <button class="custom_btn" @click="toggleTaskView">Nueva tarea</button>
+      <button class="custom_btn" @click="showTask">Nueva tarea</button>
       <task-container :title="'To do'" :task-type="'todo'" />
-      <task-container :title="'Doing'" :task-type="'doing'"/>
+      <task-container :title="'Doing'" :task-type="'doing'" />
       <task-container :title="'Done'" :task-type="'done'" />
       <task-container :title="'Backlog'" :task-type="'backlog'" />
     </div>
@@ -13,32 +13,32 @@
 </template>
 
 <script lang="ts">
-
 import Vue from 'vue'
 export default Vue.extend({
-data() {
-    const taskOpened: boolean = false
-    return { taskOpened }
-  },
   head() {
     return {
-      title: 'To do app'
+      title: 'To do app',
     }
   },
-  created(){
-   this.generateLocalStorage()
+  computed: {
+    taskOpened() {
+      return this.$store.state.showTask.isShowed
+    },
+  },
+  created() {
+    this.generateLocalStorage()
   },
   methods: {
-    toggleTaskView() {
-    this.taskOpened = !this.taskOpened
-  },
+    showTask() {
+      this.$store.commit('showTask')
+    },
 
-  generateLocalStorage() {
-    const tasks: any = {data: []}
-    if (!window.localStorage.getItem('tasks')) {
-      window.localStorage.setItem('tasks', JSON.stringify(tasks))
-    }
-  }
+    generateLocalStorage() {
+      const tasks: any = { data: [] }
+      if (!window.localStorage.getItem('tasks')) {
+        window.localStorage.setItem('tasks', JSON.stringify(tasks))
+      }
+    },
   },
 })
 </script>
